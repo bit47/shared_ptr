@@ -1,5 +1,6 @@
 #include<iostream>
 #include<functional>
+#include <atomic>
 
 using namespace std;
 
@@ -19,12 +20,12 @@ namespace xyc
         }
         shared_ptr(T* ptr = nullptr)
             :_ptr(ptr)
-            ,_pcount(new int(1))
+            ,_pcount(new atomic<int>(1))
         {}
         template<class D>//删除器的函数指针类
         shared_ptr(T* ptr,D del)//构造
             :_ptr(ptr)
-            ,_pcount(new int(1))
+            ,_pcount(new atomic<int>(1))
             ,_del(del)
         {}
 
@@ -63,7 +64,7 @@ namespace xyc
 
     private:
         T* _ptr;
-        int* _pcount;
+        atomic<int>* _pcount;
         function<void(T*)> _del = [](T* ptr){ delete ptr;};//function包装器
     };
 
